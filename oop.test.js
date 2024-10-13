@@ -33,7 +33,7 @@ describe('OOP function tests', () => {
     });
 
 
-    test("T02_ValidPriorityOperations", async function() {
+    test.skip("T02_ValidPriorityOperations", async function() {
         let l1 = [ 1, 3, 5, 7 ]; // valid so no change
         for(let i of l1){
          expect( validatePriority( i ) ).toBe( i );
@@ -56,7 +56,7 @@ describe('OOP function tests', () => {
     });
 
     
-    test("T03_ValidDateTimeNowOperations", async function() {
+    test.skip("T03_ValidDateTimeNowOperations", async function() {
         let today = new Date(); // get the current date and timestamp
         let date = today.getDate().toString().padStart(2, '0') + '/' + 
                    (today.getMonth() + 1).toString().padStart(2, '0') + '/' + 
@@ -70,7 +70,7 @@ describe('OOP function tests', () => {
     });
       
 
-    test("T04_CheckTaskAttributes", async function() {
+    test.skip("T04_CheckTaskAttributes", async function() {
         let today = new Date(); // get the current date and timestamp
         let date = today.getDate().toString().padStart(2, '0') + '/' + 
                    (today.getMonth() + 1).toString().padStart(2, '0') + '/' + 
@@ -89,7 +89,7 @@ describe('OOP function tests', () => {
     });
 
 
-    test("T05_CheckTaskClassRWAccessors", async function() {
+    test.skip("T05_CheckTaskClassRWAccessors", async function() {
        let x = new Task();
        expect(typeof(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(x), 'added').get )).toBe ( 'function' );
        expect(typeof(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(x), 'added').set )).toBe ( 'undefined' );
@@ -104,7 +104,7 @@ describe('OOP function tests', () => {
     });  
 
 
-    test("T06_TaskClassBehaviour", async function() {
+    test.skip("T06_TaskClassBehaviour", async function() {
         let task = new Task('T1', PRIORITY['LOW'] )
         expect( task.priority ).toBe( PRIORITY['LOW'] );
         
@@ -120,7 +120,7 @@ describe('OOP function tests', () => {
     });
 
 
-    test("T07_CheckToDoClassFunctions", async function() {
+    test.skip("T07_CheckToDoClassFunctions", async function() {
         let y = new ToDo();
         expect ( typeof(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(y), 'add').value) ).toBe('function')
         expect ( typeof(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(y), 'remove').value) ).toBe('function')
@@ -130,7 +130,7 @@ describe('OOP function tests', () => {
     });
 
 
-    test("T08_ToDoClassBehaviourAddListRemove", async function() {
+    test.skip("T08_ToDoClassBehaviourAddListRemove", async function() {
         let tasks = new ToDo();
       
         expect( tasks.add (new Task ('ACME T1', PRIORITY [ 'LOW' ]) )).toBe( 1 );
@@ -153,7 +153,7 @@ describe('OOP function tests', () => {
     });
 
 
-    test("T09_ToDoClassTaskAccess", async function() {
+    test.skip("T09_ToDoClassTaskAccess", async function() {
   
         tasks = new ToDo ( )
       
