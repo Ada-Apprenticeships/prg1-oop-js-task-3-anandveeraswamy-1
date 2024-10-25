@@ -1,101 +1,120 @@
 PRIORITY = { "LOW": 1, "MEDIUM": 3, "HIGH": 5, "URGENT": 7 };
 
 
-function validInteger(value) {
-  // Check if value is a number
-  if (typeof value === 'number') {
-      // Return true for positive integers and zero
-      return Number.isInteger(value) && value >= 0;
-  }
-
-  // Check if value is a string
-  if (typeof value === 'string') {
-      // Trim the string
-      const trimmedValue = value.trim();
-
-      // Check if the trimmed value is empty
-      if (trimmedValue.length === 0) {
-          return false; // Empty string is invalid
-      }
-
-      // Use regex to check if it represents a valid positive integer
-      // This regex matches whole numbers only (e.g., 1, 2, 3), and excludes negatives and decimals
-      const isInteger = /^\d+$/.test(trimmedValue);
-      
-      // Convert to a number
-      const num = Number(trimmedValue);
-
-      // Return true if it's a valid non-negative integer
-      return isInteger && num >= 0; // num should be >= 0 to cover '0'
-  }
-
-  // If the value is neither a string nor a number, return false
-  return false;
+function validInteger(value) {        
+  const INT = /^[0-9]+$/;
+  return INT.test(value);
 }
 
-// tests for validInteger(value)
-/*console.log(validInteger(42));         // true
-console.log(validInteger('42'));       // true
-console.log(validInteger('  42  '));   // true
-console.log(validInteger(-42));        // false
-console.log(validInteger(0));          // false
-console.log(validInteger('0'));        // false
-console.log(validInteger('42.5'));     // false
-console.log(validInteger('abc'));      // false
-console.log(validInteger(''));         // false*/
-let l3 = [ '-0', 'A','0A', '1.0', 'A0', '', ' ', '.' ];
-      for(let i of l3){
-        console.log(validInteger(i)); 
-    }
-
-
-
-
 function validatePriority(priority) { // value can be a string or a number (integer)
-  // Define valid priorities
-  const validPriorities = [1, 3, 5, 7];
-
-  // Check if the value is a number and is in the valid priorities
-  if (validInteger(priority) && validPriorities.includes(priority)) {
-    if(typeof priority === 'string') {
-      const numValue = parseInt(priority, 10); // Convert string to integer
-      return numValue;
-    }
-    else {
-      return priority;
-    }      
+  const validPriority = [1,3,5,7];
+  const priorityInt = Number(priority);
+  if(validInteger(priorityInt) && validPriority.includes(priorityInt)) {
+    return priorityInt;
   }
-
-
   return 1; // LOW priority
 }
 
-// Example usage:
-console.log(validatePriority(1));         // Output: 1
-console.log(validatePriority(3));         // Output: 3
-console.log(validatePriority(5));         // Output: 5
-console.log(validatePriority(7));         // Output: 7
-console.log(validatePriority(2));         // Output: 1 (LOW priority)
-console.log(validatePriority('5'));       // Output: 5
-console.log(validatePriority('3'));       // Output: 3
-console.log(validatePriority('invalid'));  // Output: 1 (LOW priority)
-console.log(validatePriority(''));        // Output: 1 (LOW priority)
-console.log(validatePriority(null));      // Output: 1 (LOW priority)
+function todaysDate() {
+  const date = new Date();
+  
+  const day = String(date.getDate()).padStart(2,0);
+  const month = String(date.getMonth()+1).padStart(2,0);
+  const year = date.getFullYear();
+  
+  const hours = String(date.getHours()).padStart(2,0);
+  const minutes = String(date.getMinutes()).padStart(2,0);
+  const seconds = String(date.getSeconds()).padStart(2,0);
 
-
-function todaysDate () {
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   
 }
 
+class Task  {  
+  _added;
+  _title;
+  _priority;
 
-class Task  {
+  constructor(title,priority) {
+    this._title = title;
+    this._priority = validatePriority(priority);
+    this._added = todaysDate();
+  }
 
-  // (title, priority)
+  get added() {
+    return this._added;
+  }
+
+  get title() {
+    return this._title;
+  }
+
+  get priority() {
+    return this._priority;
+  }
+
+  set priority(priority) {    
+      this._priority = validatePriority(priority);    
+  }  
 }
 
-
 class ToDo {
-    
+  tasks = [];
+
+  constructor() {
+
+  }
+
+  add(task){
+    this.tasks.push(task);
+    return this.tasks.length;
+  }    
+
+  remove(title) {
+    for(let i=0; i < this.tasks.length; i++) {
+      if(this.tasks[i].title == title) {
+        this.tasks.splice(i,1);
+        return true;
+      }
+    }
+      return false;
+  }
+
+  list(priority=0) {
+    let filteredList = [];
+    priority = validatePriority(priority);
+    for(let task of this.tasks) {
+      if(task.priority == priority) {
+        filteredList.push(task)
+      }
+    }    
+    return filteredList;
+  }
+
+  task(title) {
+    for(let task of this.tasks) {
+      if(task.title == title) {
+        return task;
+      }
+    } 
+    throw new Error(`Task ${title} Not Found`)   
+  }
+}
+
+let task = new Task('Get Cappuccino', PRIORITY['MEDIUM'])
+let taskList = new ToDo ()
+//taskList.add (task )
+taskList.add (new Task( 'Get Cappuccino', PRIORITY [ 'HIGH' ]) )
+taskList.add (new Task( 'Order Lunch', PRIORITY [ 'MEDIUM' ]) )
+taskList.add (new Task( 'Complete Project Sprint', PRIORITY [ 'LOW' ]) )
+//console.log(taskList.tasks);
+//console.log(taskList.list());
+taskList.remove('Order Lunch');
+try {
+  console.log(taskList.task('dsfsfGet Cappuccino'));
+}
+catch(error) {
+  console.error(`${error.message}`)
 }
 
 
